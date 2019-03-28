@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
-import static java.time.Month.JANUARY;
+import java.time.Month;
 
 final class StockDailyRecordTest
 {
@@ -15,7 +14,7 @@ final class StockDailyRecordTest
         // when
         StockDailyRecord.builder().
                 symbol("AA").
-                date(LocalDate.of(1999, JANUARY, 1)).
+                date(LocalDate.of(1999, Month.JANUARY, 1)).
                 open(new BigDecimal(55.92)).
                 high(new BigDecimal(55.92)).
                 low(new BigDecimal(55.92)).
