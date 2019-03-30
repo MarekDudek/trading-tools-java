@@ -2,16 +2,11 @@ package com.marekdudek.trading_tools;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.marekdudek.trading_tools.StockDailyRecordParser.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -21,35 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 final class DailyStockRecordParserTest
 {
     @Test
-    void test() throws IOException
-    {
-        final BufferedReader reader =
-                new BufferedReader(
-                        new FileReader("./src/test/resources/NYSE_19990101.csv")
-                );
-
-        final String header = reader.readLine();
-        checkArgument(
-                properStockDailyRecordsFileHeader(header)
-        );
-
-        String line = reader.readLine();
-        final List<DailyStockRecord> records = new ArrayList<>();
-        while (line != null)
-        {
-            final DailyStockRecord record = dailyStockRecord(line);
-            records.add(record);
-            line = reader.readLine();
-        }
-
-        reader.close();
-
-        // then
-        assertThat(records, hasSize(1098));
-    }
-
-    @Test
-    void proper_header()
+    void checking_header()
     {
         assertTrue(
                 properStockDailyRecordsFileHeader("Symbol,Date,Open,High,Low,Close,Volume")
@@ -68,7 +35,7 @@ final class DailyStockRecordParserTest
     }
 
     @Test
-    void parsing_record()
+    void parsing_single_record()
     {
         // given
         final String line = "AA,05-Jan-1999,56.0625,57.375,55.9725,56.4375,696600";
@@ -90,5 +57,14 @@ final class DailyStockRecordParserTest
                                 build()
                 )
         );
+    }
+
+    @Test
+    void parsing_daily_file()
+    {
+        // when
+        final List<DailyStockRecord> records = dailyFile("./src/test/resources/NYSE_19990101.csv");
+        // then
+        assertThat(records, hasSize(1098));
     }
 }

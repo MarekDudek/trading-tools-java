@@ -1,9 +1,17 @@
 package com.marekdudek.trading_tools;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.marekdudek.trading_tools.FunctionalUtils.error;
 
 public enum StockDailyRecordParser
 {
@@ -40,5 +48,37 @@ public enum StockDailyRecordParser
                 close(c).
                 volume(v).
                 build();
+    }
+
+    public static List<DailyStockRecord> dailyFile(final String path)
+    {
+        try (
+                final BufferedReader reader =
+                        new BufferedReader(
+                                new FileReader("./src/test/resources/NYSE_19990101.csv")
+                        )
+        )
+        {
+            final String header = reader.readLine();
+            checkArgument(
+                    properStockDailyRecordsFileHeader(header)
+            );
+
+            final List<DailyStockRecord> records = new ArrayList<>();
+
+            String line = reader.readLine();
+            while (line != null)
+            {
+                final DailyStockRecord record = dailyStockRecord(line);
+                records.add(record);
+                line = reader.readLine();
+            }
+
+            return records;
+        }
+        catch (final IOException e)
+        {
+            return error(e);
+        }
     }
 }
