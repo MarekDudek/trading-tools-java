@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Builder
 @EqualsAndHashCode
 @ToString
-public final class StockDailyRecord
+public final class DailyStockRecord
 {
     @NonNull
     public final String symbol;

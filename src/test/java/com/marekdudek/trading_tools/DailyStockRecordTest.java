@@ -6,13 +6,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
 
-final class StockDailyRecordTest
+final class DailyStockRecordTest
 {
     @Test
     void stock_daily_record_can_be_fluently_built()
     {
         // when
-        StockDailyRecord.builder().
+        DailyStockRecord.builder().
                 symbol("AA").
                 date(LocalDate.of(1999, Month.JANUARY, 1)).
                 open(new BigDecimal(55.92)).
